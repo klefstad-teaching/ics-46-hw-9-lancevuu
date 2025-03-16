@@ -48,13 +48,12 @@ vector<int> extract_shortest_path(const vector<int>&, const vector<int>& previou
     return path; // finds the shortest path
 }
 
-void print_path(const vector<int>& v, int total) {
-    if (v.empty()) {
+void print_path(const vector<int>& path, int total) {
+    if (path.empty()) {
         cout << "\nTotal cost is " << total << "\n";
         return;
     }
-    for (int node : v) {
-        cout << node << " ";
-    }
-    cout << "\nTotal cost is " << total << endl; // prints out the path from Dijkstra's
-}
+    for (size_t i = 0; i < path.size(); ++i)
+        cout << path[i] << " ";
+    cout << "\nTotal cost is " << total << "\n";
+} // prints out the path from Dijkstra's
