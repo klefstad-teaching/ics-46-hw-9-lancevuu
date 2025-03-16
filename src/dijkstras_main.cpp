@@ -1,8 +1,8 @@
-#include "dijkstra.h"
+#include "dijkstras.h"
 
 int main() {
     Graph G;
-    file_to_graph("src/small.txt", G);
+    file_to_graph("src/largest.txt", G);
     int source = 0;
     vector<int> previous;
     vector<int> distance = dijkstra_shortest_path(G, source, previous);
