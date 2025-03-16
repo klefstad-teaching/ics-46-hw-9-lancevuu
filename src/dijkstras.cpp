@@ -17,19 +17,19 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     int n = G.numVertices;
     vector<int> distance(n, INF); // initializes vectors
     vector<bool> visited(n, false);
-    previous.resize(n, -1);
-    distance[source] = 0;
     priority_queue<Node, vector<Node>, greater<Node>> pq; // pq initialized
     pq.push(Node(source, 0));
+    distance[source] = 0;
+    previous.resize(n, -1);
     while (!pq.empty()) { // processes each node until pq is empty
         Node currentNode = pq.top();
         pq.pop();
         int u = currentNode.vertex;
         if (visited[u]) continue;
         visited[u] = true;
-        for (const Edge& edge : G[u]) {
-            int v = edge.dst;
-            int weight = edge.weight;
+        for (const Edge& adjacent : G[u]) {
+            int v = adjacent.dst;
+            int weight = adjacent.weight;
             if (!visited[v] && distance[u] + weight < distance[v]) {
                 distance[v] = distance[u] + weight;
                 previous[v] = u;
