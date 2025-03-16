@@ -54,3 +54,39 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     }
     return {}; // generates the word ladder, checking each word in the word list for adjacency and adding the new ladder to the queue or returns an empty vector with no ladder
 }
+
+void load_words(set<string>& word_list, const string& file_name) {
+    ifstream file(file_name);
+    if (!file) {
+        cerr << "Error opening file: " << file_name << endl;
+        return;
+    }
+    string word;
+    while (file >> word) {
+        word_list.insert(word);
+    } // loads word from text file into the word list for processing
+}
+
+void print_word_ladder(const vector<string>& ladder) {
+    if (ladder.empty()) {
+        cout << "No word ladder found." << endl;
+        return;
+    }
+    for (size_t i = 0; i < ladder.size(); ++i) {
+        if (i > 0) cout << " -> ";
+        cout << ladder[i];
+    }
+    cout << endl; // prints out the word ladder into the proper format
+}
+
+void verify_word_ladder() {
+    set<string> word_list;
+    load_words(word_list, "src/words.txt");
+
+    my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
+    my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
+    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+    my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
+    my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+} // verifies whether the word ladder actually generates properly and wworks properly
