@@ -1,44 +1,29 @@
 #include "dijkstras.h"
-#include <algorithm>
-#include <iostream>
-#include <queue>
-
-struct Node {
-    int vertex;
-    int weight;
-    Node(int v, int w) : vertex(v), weight(w) {}
-
-    bool operator>(const Node& other) const {
-        return weight > other.weight;
-    }
-};
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
     int n = G.numVertices;
-    vector<int> distance(n, INF); // initializes vectors
-    vector<bool> visited(n, false);
-    priority_queue<Node, vector<Node>, greater<Node>> pq; // pq initialized
-    pq.push(Node(source, 0));
-    distance[source] = 0;
-    previous.resize(n, -1);
-    while (!pq.empty()) { // processes each node until pq is empty
-        Node currentNode = pq.top();
+    vector<int> distances(n, INF);
+    previous.assign(n, -1);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+    distances[source] = 0;
+    pq.push({0, source});
+    while (!pq.empty()) {
+        int currentDist = pq.top().first;
+        int u = pq.top().second;
         pq.pop();
-        int u = currentNode.vertex;
-        if (visited[u]) continue;
-        visited[u] = true;
-        for (const Edge& adjacent : G[u]) {
-            int v = adjacent.dst;
-            int weight = adjacent.weight;
-            if (!visited[v] && distance[u] + weight < distance[v]) {
-                distance[v] = distance[u] + weight;
+        if (currentDist > distances[u]) continue;
+        for (const Edge& edge : G[u]) {
+            int v = edge.dst, weight = edge.weight;
+            if (distances[u] + weight < distances[v]) {
+                distances[v] = distances[u] + weight;
                 previous[v] = u;
-                pq.push(Node(v, distance[v]));
+                pq.push({distances[v], v});
             }
         }
     }
-    return distance; //  Dijkstra's algorithm, computing the shortest paths from the source node to all other nodes
-}
+    return distances;
+}  // Dijkstra's algorithm, computing the shortest paths from the source node to all other nodes
+
 
 
 vector<int> extract_shortest_path(const vector<int>&, const vector<int>& previous, int destination) {
