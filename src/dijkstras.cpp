@@ -1,0 +1,32 @@
+#include "djikstras.h"
+
+vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
+    int n = G.numVertices;
+    priority_queue<Node, vector<Node>, greater<Node>> pq; // pq initialized
+    vector<int> distance(n, INF); // initializes vectors
+    vector<bool> visited(n, false);
+    previous.resize(n, -1);
+    distance[source] = 0;
+    pq.push(Node(source, 0));
+    while (!pq.empty()) { // processes each node until pq is empty
+        Node currentNode = pq.top();
+        pq.pop();
+        int u = currentNode.vertex;
+        if (visited[u]) continue;
+        visited[u] = true;
+        for (const Edge& edge : G[u]) {
+            int v = edge.dst;
+            int weight = edge.weight;
+            if (!visited[v] && distance[u] + weight < distance[v]) {
+                distance[v] = distance[u] + weight;
+                previous[v] = u;
+                pq.push(Node(v, distance[v]));
+            }
+        }
+    }
+    return distance; //  Dijkstra's algorithm, computing the shortest paths from the source node to all other nodes
+}
+
+
+vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector<int>& previous, int destination);
+void print_path(const vector<int>& v, int total);
