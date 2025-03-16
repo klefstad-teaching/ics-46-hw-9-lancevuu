@@ -2,11 +2,11 @@
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
     int n = G.numVertices;
-    priority_queue<Node, vector<Node>, greater<Node>> pq; // pq initialized
     vector<int> distance(n, INF); // initializes vectors
     vector<bool> visited(n, false);
     previous.resize(n, -1);
     distance[source] = 0;
+    priority_queue<Node, vector<Node>, greater<Node>> pq; // pq initialized
     pq.push(Node(source, 0));
     while (!pq.empty()) { // processes each node until pq is empty
         Node currentNode = pq.top();
@@ -28,5 +28,22 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
 }
 
 
-vector<int> extract_shortest_path(const vector<int>& /*distances*/, const vector<int>& previous, int destination);
-void print_path(const vector<int>& v, int total);
+vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination) {
+    vector<int> path;
+    for (int node = destination; node != -1; node = previous[node]) {
+        path.push_back(node);
+    }
+    reverse(path.begin(), path.end());
+    return path; // finds the shortest path
+}
+
+void print_path(const vector<int>& v, int total) {
+    if (v.empty() || v[0] != 0) {
+        cout << "No path found." << endl;
+        return;
+    }
+    for (int node : v) {
+        cout << node << " ";
+    }
+    cout << "\nTotal cost is " << total << endl; // prints out the path from Dijkstra's
+}
