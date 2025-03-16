@@ -1,4 +1,5 @@
 #include "dijkstras.h"
+#include <algorithm>
 
 struct Node {
     int vertex;
