@@ -9,15 +9,6 @@ using namespace std;
 
 constexpr int INF = numeric_limits<int>::max();
 
-struct Node {
-    int vertex;
-    int weight;
-    Node(int v, int w) : vertex(v), weight(w) {}
-
-    bool operator>(const Node& other) const {
-        return weight > other.weight;
-    }
-};
 
 struct Edge {
     int src=0;
