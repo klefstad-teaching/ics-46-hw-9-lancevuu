@@ -6,27 +6,22 @@ void error(string word1, string word2, string msg) {
     cerr << "Error: " << msg << " - " << word1 << ", " << word2 << endl; // prints out error message
 }
 
-bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
-    int str1_len = str1.length();
-    int str2_len = str2.length();
-    if (abs(str1_len - str2_len) > d) return false;
-    vector<int> prev(str2_len + 1), curr(str2_len + 1);
-    for (int j = 0; j <= str2_len; ++j) prev[j] = j;
-
-    for (int i = 1; i <= str1_len; ++i) {
-        curr[0] = i;
-        int minimum = curr[0];
-        for (int j = 1; j <= str2_len; ++j) {
-            if (str1[i - 1] == str2[j - 1])
-                curr[j] = prev[j - 1];
-            else
-                curr[j] = min({prev[j - 1] + 1, prev[j] + 1, curr[j - 1] + 1});
-            minimum = min(minimum, curr[j]);
-        }
-        if (minimum > d) return false;
-        swap(prev, curr);
+bool edit_distance_within(const string& str1, const string& str2, int d) {
+    int str1_len = str1.length(), str2_len = str2.length();
+    int len_difference = abs(str1_len - str2_len);
+    if (len_difference > d) return false;
+    int edits = 0, i = 0, j = 0;
+    while (i < str1_len && j < str2_len) {
+        if (str1[i] != str2[j]) {
+            edits++;
+            if (edits > d) return false;
+            if (str1_len > str2_len) i++;
+            else if (str1_len < str2_len) j++;
+            else { i++; j++; }
+        } else { i++; j++; }
     }
-    return prev[str2_len] <= d;
+    edits += (str1_len - i) + (str2_len - j);
+    return edits <= d;
 } // checks whether or not the edit dstance between str1 and str2 is within d (going to be 1 for this homework)
 
 bool is_adjacent(const string& word1, const string& word2) {
@@ -72,9 +67,10 @@ void print_word_ladder(const vector<string>& ladder) {
         cout << "No word ladder found." << endl;
         return;
     }
+    cout << "Word ladder found: ";
     for (size_t i = 0; i < ladder.size(); ++i) {
-        if (i > 0) cout << " -> ";
         cout << ladder[i];
+        if (i < ladder.size() - 1) cout << " ";
     }
     cout << endl; // prints out the word ladder into the proper format
 }
