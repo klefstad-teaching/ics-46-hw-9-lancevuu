@@ -1,5 +1,14 @@
 #include "dijkstras.h"
 
+struct Node {
+    int vertex;
+    int weight;
+    Node(int v, int w) : vertex(v), weight(w) {}
+
+    bool operator>(const Node& other) const {
+        return weight > other.weight;
+    }
+};
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous) {
     int n = G.numVertices;
